@@ -15,20 +15,34 @@ def init(rank, num_procs, device, master_port):
 
     os.environ["MASTER_ADDR"] = "localhost"
     os.environ["MASTER_PORT"] = str(master_port)
-
-    if (device == "cpu"):
-        backend = "gloo"
-    elif ("cuda" in device):
-        backend = "nccl"
-    else:
-        assert False, "Unsupported multiprocessing device {:s}".format(device)
     
-    os_platform = platform.system()
-    if (backend == "nccl" and os_platform == "Windows"):
-        print("Pytorch doesn't support NCCL on Windows, defaulting to gloo backend")
-        backend = "gloo"
+    # Disable libuv to avoid compatibility issues
+    os.environ["TORCH_DISTRIBUTED_USE_LIBUV"] = "0"
 
-    torch.distributed.init_process_group(backend, rank=rank, world_size=num_procs)
+    os_platform = platform.system()
+    
+    # in windows, use gloo backend
+    if os_platform == "Windows":
+        backend = "gloo"
+        print("Running on Windows, using gloo backend")
+    else:
+        if (device == "cpu"):
+            backend = "gloo"
+        elif ("cuda" in device):
+            backend = "nccl"
+        else:
+            assert False, "Unsupported multiprocessing device {:s}".format(device)
+
+    # Initialize init_method with use_libuv=0 query parameter
+    init_method = f"tcp://localhost:{master_port}?use_libuv=0"
+    print(f"Using init_method: {init_method}")
+    
+    torch.distributed.init_process_group(
+        backend, 
+        init_method=init_method,
+        rank=rank, 
+        world_size=num_procs
+    )
 
     return
 

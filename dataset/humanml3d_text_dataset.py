@@ -15,9 +15,11 @@ class HumanML3D(humanml3d_dataset.HumanML3D):
     NAME = 'HumanML3D_TEXT'
     def __init__(self, config):
         self.labels = []
-        super().__init__(config)
         self.text_path = config['data']['text_path']
         self.text_model_path = config['data']['text_model_path']
+        
+        super().__init__(config)
+        
         self.sentence_transformer = self.init_text_model(self.text_model_path)
         #test_txt = ['hello!', 'bye', 'hi']
         #test_emb = self.sentence_transformer.encode(test_txt)

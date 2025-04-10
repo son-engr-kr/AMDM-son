@@ -51,11 +51,20 @@ conda activate amdm
 pip install -r requirement.txt
 mkdir output
 ```
+Hyoungseo:
+```
+py -3.7 -m pip install .venv
+pip install -r requirement_humanml_text.txt
+```
 
 ## Base Model
 ### Training
 ```
 python run_base.py --arg_file args/amdm_DATASET_train.txt
+```
+Hyoungseo:
+```
+.\.venv\Scripts\python.exe run_base.py --arg_file args/amdm_humanml3d_text_train.txt
 ```
 or
 ```

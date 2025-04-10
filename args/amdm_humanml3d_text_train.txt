@@ -5,5 +5,5 @@
 --out_model_file output/base/amdm_humanml3d_text/model_param.pth
 
 --mode train
---master_port 0
+--master_port 29500
 --rand_seed 114514
