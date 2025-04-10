@@ -12,11 +12,11 @@ from dataset.util.humanml3d.util.paramUtil import *
 class HumanML3D(base_dataset.BaseMotionData):
     NAME = 'HumanML3D_ORG'
     def __init__(self, config):
-        super().__init__(config)
 
         self.train_split_file = config['data']['train_split']
         self.val_split_file = config['data']['val_split']
         self.test_split_file = config['data']['test_split']
+        super().__init__(config)
         self.test_data_flattened, self.test_valid_idx = self.load_motion_from_split(self.test_split_file,self.test_num_steps)
         self.val_data_flattened, self.val_valid_idx = self.load_motion_from_split(self.val_split_file,self.test_num_steps)
        
