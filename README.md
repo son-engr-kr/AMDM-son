@@ -53,7 +53,7 @@ mkdir output
 ```
 Hyoungseo:
 ```
-py -3.7 -m pip install .venv
+py -3.11.9 -m venv .venv
 pip install -r requirement_humanml_text.txt
 ```
 
