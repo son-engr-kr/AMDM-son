@@ -128,13 +128,18 @@ class BaseMotionData(data.Dataset):
 
         if self.load_full_data:
             if osp.exists(osp.join(self.path,'data.npz')) and self.load_cache:
-                with np.load(osp.join(self.path,'data.npz')) as data:
-                    self.motion_flattened = data['motion_flattened']
-                    self.valid_range = data['valid_range']
-                    self.file_lst = data['file_lst']
-                
-                if 'labels' in data.keys():
-                    self.labels= data['labels']
+                try:
+                    with np.load(osp.join(self.path,'data.npz')) as data:
+                        self.motion_flattened = data['motion_flattened']
+                        self.valid_range = data['valid_range']
+                        self.file_lst = data['file_lst']
+                    
+                        if 'labels' in data.keys():
+                            self.labels = data['labels']
+                except Exception as e:
+                    print(f"Error loading data.npz: {e}")
+                    print("Regenerating dataset...")
+                    self.load_cache = False
                 
             else:
                 file_paths = self.get_motion_fpaths()
